@@ -6,6 +6,7 @@ class LoginPage {
         this.username = page.getByRole('textbox',{name: 'Username'});
         this.password = page.getByRole('textbox', {name: 'Password'});
         this.button_login = page.locator('//input[@id="login-button"]');
+        this.messageAlert = page.locator('//h3[@data-test="error"]');
     }
 
     async sendUsername(user){
@@ -19,6 +20,13 @@ class LoginPage {
     }
     async validateLoginSuccess(){
         await expect(this.page.locator('//div[@id="inventory_container"]').first()).toBeVisible();
+    }
+
+    async showErrorMessage(messageAlert){
+        await expect(this.messageAlert).toBeVisible();
+        const textValidation = await this.messageAlert.textContent();
+        console.log(textValidation)
+        await expect(textValidation).toContain(messageAlert);
     }
     async fillLogin(user,password){
         await this.sendUsername(user);
